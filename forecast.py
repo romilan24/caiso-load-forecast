@@ -65,7 +65,8 @@ train_end_date_date = train_end_date.date()
 predict_date_date = predict_date.date()
 
 #library, change to file path where .csv files located
-path = 'C:/Users/groutgauss/Machine_Learning_Projects/Load Forecast/CAISO Load Forecast/'
+#change to where you save the data.csv file
+path = 'C:/Users/~/~/'
 
 merged_df = pd.read_csv(path + 'data.csv')
 
@@ -104,7 +105,7 @@ for model_name in models:
         
         model = train_model(model_name, X_train_hour, y_train_hour)
         
-        # Assuming you have 2023-07-31 data for exogenous features
+        # Load X_forecast and predict y_forecast
         X_forecast = data[data['date'] == pd.to_datetime(predict_date_date).date()]
         X_forecast = X_forecast[X_forecast['he'] == hour].drop(['datetime', 'caiso_load_actuals', 'date', 'he'], axis=1)
         y_forecast = model.predict(X_forecast)
