@@ -71,11 +71,11 @@ train_end_date_date = train_end_date.date()
 predict_date_date = predict_date.date()
 
 #library, change to file path where .csv files located
-path = 'C:/Users/groutgauss/Machine_Learning_Projects/Load Forecast/CAISO Load Forecast/'
+path = 'C:/Users/~'
 
 # Example usage
-load_dir = 'C:/Users/groutgauss/Machine_Learning_Projects/caiso-data-downloader/'
-temp_dir = 'C:/Users/groutgauss/Machine_Learning_Projects/weather-data-scraper/'
+load_dir = 'C:/Users/~'
+temp_dir = 'C:/Users/~'
 
 load, temp = import_data(load_dir, temp_dir)
 merged_df = merge_data(load, temp)
@@ -120,8 +120,6 @@ for model_name in models:
         
 
 ##Compare Performance##
-# Import actual data from 'Actuals_20230731.csv'; pulled from oasis.caiso.com
-#actual_data = pd.read_csv(path + 'Actuals_20230731.csv', usecols=['OPR_DT', 'OPR_HR', 'MW'])
 
 # Subset df for the predict_date
 actuals = data[data['date'] == pd.to_datetime(predict_date_date)]
