@@ -1,15 +1,9 @@
 import pandas as pd
-import numpy as np
-from models import train_model
-#from utils import load_data, rename_columns, split_data, calculate_mape
-from preprocess import import_data, merge_data, rename_columns, swap_missing_data, interpolate_missing_values, split_data, date_and_hour, calculate_mape
-from datetime import datetime
 import matplotlib.pyplot as plt
 
-#from merge_data import merge_weather_data
-
-# Assuming you have a list of holidays
-holidays = [datetime(2020, 12, 25), datetime(2021, 1, 1)]  # Add more holidays
+from models import train_model
+from preprocess import import_data, merge_data, rename_columns, swap_missing_data, interpolate_missing_values, split_data, date_and_hour, calculate_mape, add_holiday_variable, create_lagged_variables
+#from datetime import datetime
 
 # Initialize models
 models = ["LinearModel", "XGBoostModel", "rfModel"]
@@ -48,7 +42,7 @@ column_mapping = {
     'KCARIVER117_Pressure':'RIV_pressure'
 }
 
-# Swap missing data
+# Columns for swap missing NaN data between SF and SJ
 sf_columns = [
     'KCASANFR698_Temperature', 'KCASANFR698_Dew_Point', 'KCASANFR698_Humidity',
     'KCASANFR698_Speed', 'KCASANFR698_Gust', 'KCASANFR698_Pressure'
@@ -61,7 +55,7 @@ sj_columns = [
 
 
 # Specify the date ranges
-train_start_date = pd.to_datetime('2021-01-01')
+train_start_date = pd.to_datetime('2021-01-02')
 train_end_date = pd.to_datetime('2023-10-03')
 predict_date = pd.to_datetime('2023-10-04')
 
@@ -71,24 +65,30 @@ train_end_date_date = train_end_date.date()
 predict_date_date = predict_date.date()
 
 #library, change to file path where .csv files located
-path = 'C:/Users/~'
+path = 'C:/Users/groutgauss/Machine_Learning_Projects/Load Forecast/CAISO Load Forecast/'
 
 # Example usage
-load_dir = 'C:/Users/~'
-temp_dir = 'C:/Users/~'
+load_dir = 'C:/Users/groutgauss/Machine_Learning_Projects/caiso-data-downloader/'
+temp_dir = 'C:/Users/groutgauss/Machine_Learning_Projects/weather-data-scraper/'
 
 load, temp = import_data(load_dir, temp_dir)
 merged_df = merge_data(load, temp)
 
+#Swap SF and SJ weather data for NaN values
 merged_df = swap_missing_data(merged_df, sf_columns, sj_columns)
 
 # Interpolate missing values
-daylight_savings_dates = [pd.to_datetime('2021-03-14'), pd.to_datetime('2022-03-13'), pd.to_datetime('2023-03-12')]
 merged_df = interpolate_missing_values(merged_df)
 
 #renames the column headers
 data = rename_columns(merged_df, column_mapping)
 date_and_hour(data)
+
+# Add holiday variable
+data = add_holiday_variable(data, 'datetime', train_start_date, train_end_date)
+
+# Create lagged variables
+data = create_lagged_variables(data, 'caiso_load_actuals', lag_range=7)
 
 #filter train/test data for start/end dates
 df = data[(data['datetime'] >= train_start_date) & (data['datetime'] <= train_end_date)]
