@@ -5,4 +5,6 @@ A Machine Learning electric demand forecast using of CAISO System Demand using t
 - download the data.csv and py scripts; save to local path
 - update path (line 69) to local path where data.csv located
 - run forecast.py script
-- observe results similar to Forecast_vs_Actuals.png and MAPE.png
+- observe results similar to
+
+|![Image1](https://github.com/romilan24/caiso-load-forecast/blob/main/Forecast_vs_Actuals.png) | ![Image2](https://github.com/romilan24/caiso-load-forecast/blob/main/MAPE.png) |
