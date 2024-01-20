@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from models import train_model
-from preprocess import import_data, merge_data, rename_columns, swap_missing_data, interpolate_missing_values, split_data, date_and_hour, calculate_mape, add_holiday_variable, create_lagged_variables
+from preprocess import rename_columns, swap_missing_data, interpolate_missing_values, split_data, date_and_hour, calculate_mape, add_holiday_variable, create_lagged_variables
 #from datetime import datetime
 
 # Initialize models
@@ -65,14 +65,9 @@ train_end_date_date = train_end_date.date()
 predict_date_date = predict_date.date()
 
 #library, change to file path where .csv files located
-path = 'C:/Users/~/'
+path = 'C:/Users/groutgauss/Machine_Learning_Projects/Load Forecast/CAISO Load Forecast/'
 
-# Example usage
-load_dir = 'C:/Users/~/'
-temp_dir = 'C:/Users/~/'
-
-load, temp = import_data(load_dir, temp_dir)
-merged_df = merge_data(load, temp)
+merged_df = pd.read_csv(path + 'data.csv')
 
 #Swap SF and SJ weather data for NaN values
 merged_df = swap_missing_data(merged_df, sf_columns, sj_columns)

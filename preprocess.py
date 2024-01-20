@@ -4,22 +4,6 @@ from sklearn.model_selection import train_test_split
 from pandas.tseries.holiday import USFederalHolidayCalendar
 
 
-def import_data(load_dir, temp_dir):
-    # Load data
-    load = pd.read_csv(load_dir + 'hourly_caiso_load.csv')
-    temp = pd.read_csv(temp_dir + 'combined_weather_data.csv')
-
-    return load, temp
-
-def merge_data(load, temp):
-    # Merge dataframes on the datetime column
-    merged_df = pd.merge(load, temp, how='inner', left_on='Time', right_on='Datetime')
-
-    # Drop the duplicate 'Time' column
-    merged_df = merged_df.drop('Datetime', axis=1)
-
-    return merged_df
-
 def date_and_hour(df):
     # Convert 'datetime' column to datetime type if not already
     df['datetime'] = pd.to_datetime(df['datetime'])
